@@ -440,3 +440,23 @@ footer {
 .f-info-social i:hover {
   color: #007bff;
 }
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .container {
+    width: 95%;
+  }
+}
+@media (max-width: 1024px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 70%;
+  }
+}
