@@ -1,0 +1,95 @@
+<% layout("/layouts/boilerplate") -%>
+<body>
+    <!-- Category Bar -->
+    <div class="category-bar">
+        <div class="category-items">
+            <a href="/listings<%= searchQuery ? '?search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'all' ? 'active' : '' %>">
+                <i class="fas fa-home"></i>
+                <span>All</span>
+            </a>
+            <a href="/listings?category=mountains<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'mountains' ? 'active' : '' %>">
+                <i class="fas fa-mountain"></i>
+                <span>Mountains</span>
+            </a>
+            <a href="/listings?category=deserts<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'deserts' ? 'active' : '' %>">
+                <i class="fas fa-sun"></i>
+                <span>Deserts</span>
+            </a>
+            <a href="/listings?category=beaches<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'beaches' ? 'active' : '' %>">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Beaches</span>
+            </a>
+            <a href="/listings?category=forests<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'forests' ? 'active' : '' %>">
+                <i class="fas fa-tree"></i>
+                <span>Forests</span>
+            </a>
+            <a href="/listings?category=cities<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'cities' ? 'active' : '' %>">
+                <i class="fas fa-city"></i>
+                <span>Cities</span>
+            </a>
+            <a href="/listings?category=lakes<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'lakes' ? 'active' : '' %>">
+                <i class="fas fa-water"></i>
+                <span>Lakes</span>
+            </a>
+            <a href="/listings?category=countryside<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" class="category-item <%= selectedCategory === 'countryside' ? 'active' : '' %>">
+                <i class="fas fa-seedling"></i>
+                <span>Countryside</span>
+            </a>
+        </div>
+        
+        <!-- Price Toggle Switch -->
+        <div class="price-toggle-container">
+            <label class="price-toggle-label">
+                <span class="toggle-text">Show price after tax</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="priceToggle" class="toggle-input">
+                    <span class="toggle-slider"></span>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <% if (searchQuery) { %>
+    <div class="search-results-info">
+        <h5>Search Results for "<%= searchQuery %>"</h5>
+        <p><%= allListings.length %> listing(s) found</p>
+        <a href="/listings" class="btn btn-outline-secondary btn-sm">Clear Search</a>
+    </div>
+    <% } %>
+
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1" id="listingsContainer">
+        <% for(let listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+            <div class="card col listing-card">
+               <!-- ✅ FIXED: use listing.image.url -->
+               <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.image.filename %>" style="height:20rem">
+                <div class="card-img-overlay"></div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <b><%= listing.title %></b><br />
+                        <span class="original-price">&#8377; <%= listing.price.toLocaleString("en-IN") %> / night</span>
+                        <span class="tax-price" style="display: none;">&#8377; <%= Math.round(listing.price * 1.18).toLocaleString("en-IN") %> / night</span>
+                    </p>
+                </div>
+            </div>
+        </a>
+        <% } %>
+    </div>
+
+    <script>
+        // Price toggle functionality
+        document.getElementById('priceToggle').addEventListener('change', function() {
+            const showTax = this.checked;
+            const originalPrices = document.querySelectorAll('.original-price');
+            const taxPrices = document.querySelectorAll('.tax-price');
+            
+            originalPrices.forEach(price => {
+                price.style.display = showTax ? 'none' : 'block';
+            });
+            
+            taxPrices.forEach(price => {
+                price.style.display = showTax ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
